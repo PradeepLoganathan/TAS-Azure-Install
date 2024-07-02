@@ -26,7 +26,8 @@ graph TD
     H --> I[Backend Pool: LoadBalancerBackEnd]
     I --> J[TAS VMs]
     F -->|Rules: SSH, HTTP, HTTPS| G
-    
+```
+
 ## Usage
 
 Utilize the provided AZ CLI scripts and follow the instructions in order to methodically set up your TAS environment on Azure.
