@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Variables from previous steps
-RESOURCE_GROUP="YOUR-RESOURCE-GROUP-NAME"
-LOCATION="westus"
-
 # Create load balancer for TAS for VMs (with public IP)
 az network lb create --name pcf-lb \
                     --resource-group $RESOURCE_GROUP \

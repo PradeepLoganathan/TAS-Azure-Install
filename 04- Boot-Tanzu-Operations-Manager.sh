@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Variables from previous steps
-RESOURCE_GROUP="YOUR-RESOURCE-GROUP-NAME"
-LOCATION="westus"
 STORAGE_NAME="your-bosh-storage-account-name"
 BOSH_CONNECTION_STRING="YOUR-ACCOUNT-KEY-STRING"  # Connection string for BOSH storage account
 

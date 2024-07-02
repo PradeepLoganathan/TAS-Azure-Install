@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Variables from previous step (assuming you've set them)
-RESOURCE_GROUP="YOUR-RESOURCE-GROUP-NAME"
-LOCATION="westus"
-
 # Set variables for storage accounts
 BOSH_STORAGE_NAME="your-bosh-storage-account-name" # Unique, lowercase, alphanumeric (3-24 chars)
 DEPLOYMENT_STORAGE_PREFIX="your-deployment-storage-prefix"  # Unique prefix for deployment accounts

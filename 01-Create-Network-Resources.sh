@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Set variables for resource group name and location
-RESOURCE_GROUP="YOUR-RESOURCE-GROUP-NAME"  # Replace with your desired name
-LOCATION="westus"                           # Replace with your desired Azure region
-
 # Create resource group
 az group create --name $RESOURCE_GROUP --location $LOCATION
 
