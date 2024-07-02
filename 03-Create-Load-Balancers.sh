@@ -6,4 +6,3 @@ az network lb rule create --resource-group tas-resource-group --lb-name pcf-lb -
 
 az network lb rule create --resource-group tas-resource-group --lb-name pcf-lb --name https-rule --protocol Tcp --frontend-port 443 --backend-port 443 --frontend-ip-name LoadBalancerFrontEnd --backend-pool-name LoadBalancerBackEnd --probe-name https-probe
 
-

@@ -10,10 +10,10 @@ az network nsg create --resource-group tas-resource-group --name opsmgr-nsg --lo
 az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name ssh-rule --priority 100 --source-address-prefixes <your-ip-address> --destination-port-ranges 22 --access Allow --protocol Tcp --direction Inbound
 
 # HTTP Rule
-az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name http-rule --priority 101 --source-address-prefixes '*' --destination-port-ranges 80 --access Allow --protocol Tcp --direction Inbound
+az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name http-rule --priority 200 --source-address-prefixes '*' --destination-port-ranges 80 --access Allow --protocol Tcp --direction Inbound
 
 # HTTPS Rule
-az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name https-rule --priority 102 --source-address-prefixes '*' --destination-port-ranges 443 --access Allow --protocol Tcp --direction Inbound
+az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name https-rule --priority 300 --source-address-prefixes '*' --destination-port-ranges 443 --access Allow --protocol Tcp --direction Inbound
 
 
 #Create Virtual Network with Subnets
