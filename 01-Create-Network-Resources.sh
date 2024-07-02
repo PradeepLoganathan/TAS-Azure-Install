@@ -1,29 +1,33 @@
-#Create Resource Group in Australia East
-az group create --name tas-resource-group --location australiaeast
+#!/bin/bash
 
-#Create Network Security Groups (NSGs)
-az network nsg create --resource-group tas-resource-group --name pcf-nsg --location australiaeast
-az network nsg create --resource-group tas-resource-group --name opsmgr-nsg --location australiaeast
+# Set variables for resource group name and location
+RESOURCE_GROUP="YOUR-RESOURCE-GROUP-NAME"  # Replace with your desired name
+LOCATION="westus"                           # Replace with your desired Azure region
 
-#Add NSG Rules
-# SSH Rule
-az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name ssh-rule --priority 100 --source-address-prefixes <your-ip-address> --destination-port-ranges 22 --access Allow --protocol Tcp --direction Inbound
+# Create resource group
+az group create --name $RESOURCE_GROUP --location $LOCATION
 
-# HTTP Rule
-az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name http-rule --priority 200 --source-address-prefixes '*' --destination-port-ranges 80 --access Allow --protocol Tcp --direction Inbound
+# Create Network Security Groups (NSGs)
+az network nsg create --name pcf-nsg --resource-group $RESOURCE_GROUP --location $LOCATION
 
-# HTTPS Rule
-az network nsg rule create --resource-group tas-resource-group --nsg-name opsmgr-nsg --name https-rule --priority 300 --source-address-prefixes '*' --destination-port-ranges 443 --access Allow --protocol Tcp --direction Inbound
+# Add NSG rules for general TAS for VMs traffic
+az network nsg rule create --name ssh --nsg-name pcf-nsg --resource-group $RESOURCE_GROUP --protocol Tcp --priority 100 --destination-port-range 22
+az network nsg rule create --name http --nsg-name pcf-nsg --resource-group $RESOURCE_GROUP --protocol Tcp --priority 200 --destination-port-range 80
+az network nsg rule create --name https --nsg-name pcf-nsg --resource-group $RESOURCE_GROUP --protocol Tcp --priority 300 --destination-port-range 443
+az network nsg rule create --name diego-ssh --nsg-name pcf-nsg --resource-group $RESOURCE_GROUP --protocol Tcp --priority 400 --destination-port-range 2222
 
+# Create NSG for Ops Manager traffic
+az network nsg create --name opsmgr-nsg --resource-group $RESOURCE_GROUP --location $LOCATION
 
-#Create Virtual Network with Subnets
+# Add NSG rules for Ops Manager traffic
+az network nsg rule create --name http --nsg-name opsmgr-nsg --resource-group $RESOURCE_GROUP --protocol Tcp --priority 100 --destination-port-range 80
+az network nsg rule create --name https --nsg-name opsmgr-nsg --resource-group $RESOURCE_GROUP --protocol Tcp --priority 200 --destination-port-range 443
+az network nsg rule create --name ssh --nsg-name opsmgr-nsg --resource-group $RESOURCE_GROUP --protocol Tcp --priority 300 --destination-port-range 22
 
-az network vnet create --name pcf-virtual-network --resource-group tas-resource-group --location australiaeast --address-prefix 10.0.0.0/16 --subnet-name infrastructure-subnet --subnet-prefix 10.0.0.0/24
+# Create virtual network
+az network vnet create --name pcf-virtual-network --resource-group $RESOURCE_GROUP --location $LOCATION --address-prefixes 10.0.0.0/16
 
-az network vnet subnet create --resource-group tas-resource-group --vnet-name pcf-virtual-network --name pas-subnet --address-prefix 10.0.1.0/24
-
-az network vnet subnet create --resource-group tas-resource-group --vnet-name pcf-virtual-network --name services-subnet --address-prefix 10.0.2.0/24
-
-#Associate NSG with Subnet:
-az network vnet subnet update --resource-group tas-resource-group --vnet-name pcf-virtual-network --name infrastructure-subnet --network-security-group opsmgr-nsg
-
+# Create subnets and associate with NSGs
+az network vnet subnet create --name pcf-infrastructure-subnet --vnet-name pcf-virtual-network --resource-group $RESOURCE_GROUP --address-prefix 10.0.4.0/26 --network-security-group pcf-nsg
+az network vnet subnet create --name pcf-pas-subnet --vnet-name pcf-virtual-network --resource-group $RESOURCE_GROUP --address-prefix 10.0.12.0/22 --network-security-group pcf-nsg
+az network vnet subnet create --name pcf-services-subnet --vnet-name pcf-virtual-network --resource-group $RESOURCE_GROUP --address-prefix 10.0.8.0/22 --network-security-group pcf-nsg
