@@ -4,11 +4,11 @@ This repository hosts AZ CLI scripts and comprehensive guidelines for deploying 
 
 ## Contents
 
-- **Network Setup:** AZ CLI scripts to establish resource groups, virtual networks, subnets, and network security groups (NSGs).
-- **Storage Configuration:** Instructions for setting up Azure storage accounts and containers using AZ CLI.
-- **Ops Manager Deployment:** Detailed steps to manage the Ops Manager VHD via AZ CLI scripts.
-- **Load Balancer Setup:** Scripts to configure load balancers essential for TAS operations.
-- **BOSH Director and TAS Deployment:** Guidance on deploying BOSH Director and TAS, leveraging AZ CLI for all configuration steps.
+- **Network Setup:** AZ CLI scripts to create resource groups, virtual networks, subnets, and network security groups (NSGs).
+- **Storage Configuration:** Instructions for creating and configuring Azure storage accounts and containers.
+- **Ops Manager Deployment:** Steps to download, upload, and configure the Ops Manager VHD.
+- **Load Balancer Setup:** Scripts to create and configure load balancers for TAS.
+- **BOSH Director and TAS Deployment:** Guidance on configuring BOSH Director and deploying TAS on Azure.
 
 ## Infrastructure Diagram
 
@@ -26,6 +26,8 @@ graph TD
     H --> I[Backend Pool: LoadBalancerBackEnd]
     I --> J[TAS VMs]
     F -->|Rules: SSH, HTTP, HTTPS| G
+    D --> K[TAS application instances, Diego cells, and other TAS components]
+    E --> L[Additional services: databases, message queues, etc.]
 ```
 
 ## Usage
